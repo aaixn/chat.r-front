@@ -1,0 +1,12 @@
+.login-form {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-around;
+}
