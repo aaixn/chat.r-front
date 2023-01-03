@@ -49,7 +49,7 @@ const Signup = ({setUser}) => {
 
 
   return (
-    <div>
+    <>
       <Box
         className='login-form'
         component="form"
@@ -69,7 +69,7 @@ const Signup = ({setUser}) => {
           <Button variant='contained' onClick={() => navigate('/login')}>Log In</Button>
         </ButtonGroup>
         </Box>
-    </div>
+    </>
   )
 }
 
