@@ -3,7 +3,7 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Login from './components/Login/Login.js';
 import Signup from './components/Signup/Signup';
-import Home from './components/Home/Home';
+import Home from './components/Home';
 
 const App = () => {
   const [user, setUser] = useState()
