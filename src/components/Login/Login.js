@@ -31,7 +31,6 @@ const Login = ({setUser}) => {
       setForm({...form, username: '', password: ''})
       if(res.data.token) {
         window.localStorage.setItem('token', JSON.stringify(res.data))
-        console.log(window.localStorage.getItem('token'))
       }
       navigate('/')
     })
