@@ -2,6 +2,7 @@ import { React, useEffect, useState } from 'react'
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Login from './components/Login/Login.js';
+import Signup from './components/Signup/Signup';
 
 const App = () => {
   const [user, setUser] = useState()
@@ -27,6 +28,7 @@ const App = () => {
     <div className="App">
       <Routes>
         <Route path='/login' element={<Login user={user} setUser={setUser} />}></Route>
+        <Route path='/signup' element={<Signup user={user} setUser={setUser} />}></Route>
       </Routes>
     </div>
   );

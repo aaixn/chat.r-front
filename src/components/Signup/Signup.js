@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import './Login.css';
+import './Signup.css';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { useNavigate } from 'react-router-dom';
+import { Alert } from '@mui/material';
 
-const Login = ({setUser}) => {
+const Signup = ({setUser}) => {
   const navigate = useNavigate()
+  const [usernameTaken, setUsernameTaken] = useState(null)
   const [form, setForm] = useState({
+    name: '',
     username: '',
-    password: ''
+    password: '',
   })
 
   const handleChange = (e) => {
@@ -20,20 +23,26 @@ const Login = ({setUser}) => {
     setForm(copyForm)
   }
 
-  const handleLogin = async () => {
-    await axios.post('http://localhost:4000/api/auth/login',
+  const handleSignup = async () => {
+    await axios.post('http://localhost:4000/api/users/signup',
     {
+      name: form.name,
       username: form.username,
       password: form.password
     })
     .then((res) => {
+      if (res.data === 'Username taken.') {
+        setUsernameTaken(true)
+      }
+      else {
       setUser({...res.data})
-      setForm({...form, username: '', password: ''})
+      setForm({...form, name: '', username: '', password: ''})
       if(res.data.token) {
         window.localStorage.setItem('token', JSON.stringify(res.data))
         console.log(window.localStorage.getItem('token'))
       }
       navigate('/')
+    }
     })
     .catch(err => console.log(err))
   }
@@ -50,17 +59,19 @@ const Login = ({setUser}) => {
         noValidate
         autoComplete="off"
       >
-        <h1>Log In</h1>
+        <h1>Sign Up</h1>
+        {usernameTaken && <Alert severity='error'>Username already taken.</Alert>}
+        <TextField className='name-input' id="name" label="Enter Name" variant="outlined" name="name" value={form.name} onChange={handleChange}/>
         <TextField className='username-input' id="username" label="Enter Username" variant="outlined" name="username" value={form.username} onChange={handleChange}/>
         <TextField className='password-input' type="password" id="password" label="Enter Password" variant="outlined" name="password" value={form.password} onChange={handleChange}/>
         <ButtonGroup className='button-group'>
-          <Button variant='contained' onClick={handleLogin}>Log In</Button>
-          <Button variant='contained' onClick={() => navigate('/signup')}>Sign Up</Button>
+          <Button variant='contained' onClick={handleSignup}>Sign Up</Button>
+          <Button variant='contained' onClick={() => navigate('/login')}>Log In</Button>
         </ButtonGroup>
         </Box>
     </div>
   )
 }
 
-export default Login
+export default Signup
 
