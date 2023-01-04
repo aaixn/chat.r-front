@@ -41,7 +41,7 @@ const Nav = ({user}) => {
         }
     }
 
-  return (
+  if (user) return (
     <Box className='nav'
         display='flex'
         flexDirection='column'
