@@ -1,59 +1,52 @@
-import { Box, Typography } from '@mui/material'
+import { Avatar, Box, Button, FormControl, TextField, Typography, Badge } from '@mui/material'
 import axios from 'axios'
 import React, { useEffect, useState, useRef } from 'react'
 import io from 'socket.io-client'
+import moment from 'moment'
 
 
-const Chat = ({user}) => {
-    const socket = useRef()
-    const [conversation, setConversation] = useState()
+const Chat = ({user, conversation, friendUsername}) => {
+    const [message, setMessage] = useState('')
 
-    useEffect(() => {
-        socket.current = io('http://localhost:4000')
-    }, [])
+    const handleChange = (e) => {
+        e.target.name = e.target.value
+        setMessage(e.target.name)
+      }
 
-    useEffect(() => {
-        user && socket.current.emit('user', user.id)
-    }, [user])
-
-    // user && socket.current.emit('sendMessage', {
-    //     senderId: user.id,
-    //     receiverId: 5,
-    //     content:'hi from baby po'
-    // })
-
-    // useEffect(() => {
-    //     socket.current = io('http://localhost:4000')
-    //     socket.current.on('retrieveMessage', (data) => {
-    //         setIncomingMessage({
-    //             sender_id: data.
-    //         })
-    //     })
-    // })
-
-    const getMessages = async() => {
-        await axios.get(`http://localhost:4000/api/messages/${user.username}/buh`, 
+      const sendMessage = async () => {
+        await axios.post('https://chat-r.herokuapp.com/api/messages',
+        {
+            senderUsername: user.username,
+            receiverUsername: friendUsername,
+            content: message
+        },
         {
             headers: {
                 'Authorization': `Bearer ${user.token}`
             } 
-        }).then(res => setConversation(res.data))
+
+        })
+        .then(res => console.log(res.data))
         .catch(err => console.log(err))
-    }
+      }
 
-    useEffect(() => {
-        user && getMessages()
-    }, [socket])
-
-  return (
-    <Box>
+      return (
+    <Box width='100%' display='flex' flexDirection='column' gap='1em'>
       {conversation && conversation.map((item, index) => {
         return (
-            <Box key={index}>
-                <Typography>{item.content}</Typography>
+            <Box key={index} display='flex' width='100%' justifyContent={user.id === item.sender_id ? 'flex-end': 'flex-start'}>
+                    <Avatar src={user.id === item.sender_id ? user.pfp : item.pfp} ></Avatar>
+                    <Box width='max-content' padding='0.5em' borderRadius='1em' backgroundColor={user.id === item.sender_id ? 'pink': 'lightgray'}>
+                        <Typography>{item.content}</Typography>
+                    </Box>
+                <Typography>{moment(`${item.time_stamp}`).format('MMM DD YYYY, h:mm a')}</Typography>
             </Box>
         )
       })}
+      <FormControl>
+        <TextField name='message' value={message} onChange={handleChange}></TextField>
+        <Button onClick={message !== '' ? sendMessage : null}>Send</Button>
+      </FormControl>
     </Box>
   )
 }

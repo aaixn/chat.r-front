@@ -21,7 +21,7 @@ const Login = ({setUser}) => {
   }
 
   const handleLogin = async () => {
-    await axios.post('http://localhost:4000/api/auth/login',
+    await axios.post('https://chat-r.herokuapp.com/api/auth/login',
     {
       username: form.username,
       password: form.password

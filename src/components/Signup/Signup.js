@@ -24,7 +24,7 @@ const Signup = ({setUser}) => {
   }
 
   const handleSignup = async () => {
-    await axios.post('http://localhost:4000/api/users/signup',
+    await axios.post('https://chat-r.herokuapp.com/api/users/signup',
     {
       name: form.name,
       username: form.username,
@@ -35,7 +35,7 @@ const Signup = ({setUser}) => {
         setUsernameTaken(true)
       }
       else {
-      setUser({...res.data})
+      setUser({...res.data.users})
       setForm({...form, name: '', username: '', password: ''})
       if(res.data.token) {
         window.localStorage.setItem('token', JSON.stringify(res.data))
