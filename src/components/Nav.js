@@ -18,7 +18,7 @@ const Nav = ({user}) => {
     }
 
     useEffect(() => {
-        getFriendList()
+        user && getFriendList()
     }, [user])
 
     const active = {
@@ -53,9 +53,9 @@ const Nav = ({user}) => {
         padding='1vw'
     >
         <Box>
-            {friendList && friendList.map(item => {
+            {friendList && friendList.map((item, index) => {
                 return(
-                    <Box display='flex' alignItems='center'>
+                    <Box display='flex' alignItems='center' key={index}>
                         <Badge overlap='circular' variant='dot' sx={item.active ? active : inactive} >
                             <Avatar src={item.pfp} height='2em'/>
                         </Badge>

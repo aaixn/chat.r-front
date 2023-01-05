@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
+import Chat from './Chat'
 import Nav from './Nav'
 
 const Home = ({user}) => {
@@ -31,6 +32,7 @@ const Home = ({user}) => {
             >
                 <Typography variant='h5'>Select a friend to start chatting with.</Typography>
             </Box>
+            <Chat user={user} />
         </Box>
     )
 }
