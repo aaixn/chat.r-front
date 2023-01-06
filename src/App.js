@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import Login from './components/Login/Login.js';
 import Signup from './components/Signup/Signup';
 import Home from './components/Home';
-import Chat from './components/Chat';
+import { Navigate } from 'react-router-dom';
 import axios from 'axios';
 
 const App = () => {
@@ -48,7 +48,7 @@ useEffect(() => {
   return (
     <div className="App">
       <Routes>
-        <Route path='/' element={<Home user={user} setUser={setUser} friendList={friendList} setFriendList={setFriendList}/> }></Route>
+        <Route path='/' element={user ? <Home user={user} setUser={setUser} friendList={friendList} setFriendList={setFriendList}/> : <Navigate to='/login'/>}></Route>
         <Route path='/login' element={<Login user={user} setUser={setUser} />}></Route>
         <Route path='/signup' element={<Signup user={user} setUser={setUser} />}></Route>
         <Route path='/:username/:friendUsername' element={<Home user={user} friendList={friendList} setFriendList={setFriendList} />}></Route>
