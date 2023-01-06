@@ -72,7 +72,7 @@ const Home = ({user, friendList, setFriendList}) => {
     }
 
     useEffect(() => {
-        receivedMessage && currentChat?.includes(receivedMessage.sender) &&
+        receivedMessage && currentChat?.includes(receivedMessage.sender_id) &&
         setConversation((prev) => [...prev, receivedMessage]);
     }, [receivedMessage, currentChat]);
 
