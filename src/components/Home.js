@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Divider, Typography } from '@mui/material'
 import React from 'react'
 import Chat from './Chat'
 import Nav from './Nav'
@@ -32,14 +32,18 @@ const Home = ({user, friendList, setFriendList}) => {
     }, [])
 
     useEffect(() => {
-        receivedMessage && currentChat.includes(receivedMessage.sender) &&
+        receivedMessage && currentChat?.includes(receivedMessage.sender) &&
         setConversation((prev) => [...prev, receivedMessage]);
     }, [receivedMessage, currentChat]);
 
     useEffect(() => {
         user && socket.current.emit('addUser', user.id)
         socket.current.on('getUsers', async (users) => {
-            user && setOnlineFriends(await user.friends.filter(friend => users.some(user => user.userId === friend)))
+            // const onlineFriendsList = user && user.friends.filter(friend => users.some(user => user.userId === friend))
+            await user && setOnlineFriends(user.friends.filter(friend => users.some(user => user.userId === friend)))
+            console.log(users);
+            console.log(user.friends);
+            console.log(onlineFriends);
         })
     }, [user])
 
@@ -91,21 +95,25 @@ const Home = ({user, friendList, setFriendList}) => {
         <Box className='home'
             display = 'flex'
             alignItems='center'
-            justifyContent='center'
-            gap='1rem'
+            // justifyContent='center'
+            // gap='1rem'
             height = '100vh'
             // padding='0 1rem'
         >
             <Nav user={user} friendList={friendList} setFriendList={setFriendList} onlineFriends={onlineFriends} currentChat={currentChat} setCurrentChat={setCurrentChat}/> 
+                <Divider orientation='vertical' color='black'/>
                 <Box 
                     display='flex'
                     alignItems='center'
                     justifyContent='center'
-                    border= '2px solid'
+                    // border= '2px solid'
                     borderRadius='2em'
                     width = '70%'
-                    height = '93vh'
+                    height = '100%'
                     padding='1em'
+                    // marginTop='2em'
+                    boxSizing='border-box'
+                    flexGrow='1'
                 >
                     {conversation ? <Chat conversation={conversation} setConversation={setConversation} user={user} friendUsername={friendUsername} friendList={friendList} socket={socket} message={message} setMessage={setMessage} sendMessage={sendMessage}/> :
                     <Typography variant='h5'>Select a friend to start chatting with.</Typography>}

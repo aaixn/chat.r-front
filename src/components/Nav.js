@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Box, Typography, Badge, Avatar, IconButton, InputBase, Divider } from '@mui/material'
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded';
-import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import FriendRequests from './FriendRequests';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import SearchUsers from './SearchUsers';
 
-const Nav = ({user, friendList, setFriendList, onlineFriends, currentChat, setCurrentChat}) => {
+const Nav = ({user, friendList, onlineFriends, setCurrentChat}) => {
     const [search, setSearch] = useState('')
     const [showFriendRequests, setShowFriendRequests] = useState(false)
-
     const {friendUsername} = useParams()
 
     const handleChange = (e) => {
@@ -43,7 +41,6 @@ const Nav = ({user, friendList, setFriendList, onlineFriends, currentChat, setCu
 
     const setCurrentChatTo = (user, friend) => {
         setCurrentChat([user, friend])
-        // console.log(currentChat);
     }
 
     useEffect(() => {
@@ -58,11 +55,13 @@ const Nav = ({user, friendList, setFriendList, onlineFriends, currentChat, setCu
         display='flex'
         flexDirection='column'
         justifyContent='space-between'
-        border= '2px solid'
-        borderRadius='2em'
-        width = '20%'
-        height = '94vh'
-        padding='1vw'
+        // border= '2px solid'
+        // borderRadius='2em'
+        // borderRight='2px solid'
+        width = '15%'
+        height = '100%'
+        padding='0 1vw'
+        // paddingRight='2vw'
     >
         <Box display='flex' border='2px solid' borderRadius='1em' boxShadow='5px 5px pink' marginTop='1em' height='max-content'>
             <Box flexGrow='1' padding='0.3em 0.7em'>
