@@ -2,11 +2,11 @@
 by Ana Nguyen
 
 ## Project Description
----
+
 Chat.r is a live chat web application where users can add friends, see when their friends are active, and chat live with them.
 
 ## Technologies
----
+
 - React.js
 - Material UI
 - axios
@@ -15,7 +15,7 @@ Chat.r is a live chat web application where users can add friends, see when thei
 
 
 ## Usage
----
+
 ### Chatting Live with Friends
 ![image](https://user-images.githubusercontent.com/114306872/211104694-5225d2ad-4789-4c16-87f8-a188544e84b1.png)
 ### Searching for Users by Username
@@ -25,6 +25,6 @@ Chat.r is a live chat web application where users can add friends, see when thei
 ### Accepting and Declining Friend Requests
 
 ### ***To be Added***
----
+
 ### Editing User Profile
 ### Showing Read and Unopened Messages
