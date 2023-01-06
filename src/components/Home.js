@@ -39,11 +39,7 @@ const Home = ({user, friendList, setFriendList}) => {
     useEffect(() => {
         user && socket.current.emit('addUser', user.id)
         socket.current.on('getUsers', async (users) => {
-            // const onlineFriendsList = user && user.friends.filter(friend => users.some(user => user.userId === friend))
             await user && setOnlineFriends(user.friends.filter(friend => users.some(user => user.userId === friend)))
-            console.log(users);
-            console.log(user.friends);
-            console.log(onlineFriends);
         })
     }, [user])
 
@@ -95,10 +91,7 @@ const Home = ({user, friendList, setFriendList}) => {
         <Box className='home'
             display = 'flex'
             alignItems='center'
-            // justifyContent='center'
-            // gap='1rem'
             height = '100vh'
-            // padding='0 1rem'
         >
             <Nav user={user} friendList={friendList} setFriendList={setFriendList} onlineFriends={onlineFriends} currentChat={currentChat} setCurrentChat={setCurrentChat}/> 
                 <Divider orientation='vertical' color='black'/>
