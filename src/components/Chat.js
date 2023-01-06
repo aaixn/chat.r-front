@@ -35,7 +35,7 @@ const Chat = ({user, conversation, friendUsername}) => {
       {conversation && conversation.map((item, index) => {
         return (
             <Box key={index} display='flex' width='100%' justifyContent={user.id === item.sender_id ? 'flex-end': 'flex-start'}>
-                    <Avatar src={user.id === item.sender_id ? user.pfp : item.pfp} ></Avatar>
+                    <Avatar variant='soft' height='2em'>me</Avatar>
                     <Box width='max-content' padding='0.5em' borderRadius='1em' backgroundColor={user.id === item.sender_id ? 'pink': 'lightgray'}>
                         <Typography>{item.content}</Typography>
                     </Box>

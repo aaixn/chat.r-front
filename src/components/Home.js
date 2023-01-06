@@ -13,7 +13,7 @@ const Home = ({user}) => {
     const [conversation, setConversation] = useState()
 
     useEffect(() => {
-        socket.current = io('https://chat-r.herokuapp.com/')
+        socket.current = io('http://localhost:4000')
     }, [])
 
     // useEffect(() => {

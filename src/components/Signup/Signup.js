@@ -41,7 +41,7 @@ const Signup = ({setUser}) => {
         window.localStorage.setItem('token', JSON.stringify(res.data))
         console.log(window.localStorage.getItem('token'))
       }
-      navigate('/')
+      navigate('/login')
     }
     })
     .catch(err => console.log(err))

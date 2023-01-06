@@ -17,10 +17,11 @@ const FriendRequests = ({user, showFriendRequests, setShowFriendRequests}) => {
         .then((res) => setFriendRequests(res.data))
         .catch(err => console.log(err))
     }
+
     useEffect(() => {
         getFriendRequests()
     }, [user])
-
+    console.log(friendRequests);
 
     const acceptFriendRequest = async(item) => {
         await axios.put(`https://chat-r.herokuapp.com/api/friendRequest`,
@@ -38,8 +39,11 @@ const FriendRequests = ({user, showFriendRequests, setShowFriendRequests}) => {
         .catch(err => console.log(err))
     }
 
-    const declineFriendRequest = async(id) => {
+    const declineFriendRequest = async(item) => {
         await axios.delete(`https://chat-r.herokuapp.com/api/friendRequest`,
+        {
+            id: item.id
+        },
         {
             headers: {
                 'Authorization': `Bearer ${user.token}`
@@ -48,8 +52,9 @@ const FriendRequests = ({user, showFriendRequests, setShowFriendRequests}) => {
         .then((res) => console.log((res.data)))
         .catch(err => console.log(err))
     }
+
   return (
-    <Box display='flex' flexDirection='column' gap='1em' flexGrow='1' margintop='2em'>
+    <Box display='flex' flexDirection='column' gap='1em' flexGrow='1' margintop='2em'>hi
       {friendRequests && friendRequests.map((item, index) => {
                 return(
                     <Box key={index} display='flex' alignItems='center' justifyContent='space-between'>
