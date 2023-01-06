@@ -26,7 +26,7 @@ const Home = ({user, friendList, setFriendList}) => {
               {
                 sender: data.senderId,
                 text: data.content,
-                createdAt: Date.now()
+                createdAt: new Date(Date.now())
               }
             )
           })
