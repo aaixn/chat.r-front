@@ -14,9 +14,6 @@ const Chat = ({user, conversation, message, setMessage, sendMessage, friendUsern
         setMessage(e.target.name)
     }
 
-    useEffect(() => {
-        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, [conversation]);
 
     return (
         <Box width='100%' display='flex' flexDirection='column' gap='1em' height='100%' overflow='hidden'>
@@ -34,7 +31,7 @@ const Chat = ({user, conversation, message, setMessage, sendMessage, friendUsern
                         <Typography variant='h1' fontSize='1.5rem' fontWeight='bold'>@{friendUsername}</Typography>
                     </Box>
             </Box>
-            <Divider orientation='horizontal' color='black'/>
+            <Divider orientation='horizontal' color='black' flexItem/>
             <Box display='flex' flexDirection='column' gap='1em' flexGrow='1' overflow='scroll'>
             {conversation && conversation.map((item, index) => {
                 return (

@@ -55,15 +55,11 @@ const Nav = ({user, friendList, onlineFriends, setCurrentChat}) => {
         display='flex'
         flexDirection='column'
         justifyContent='space-between'
-        // border= '2px solid'
-        // borderRadius='2em'
-        // borderRight='2px solid'
         width = '15%'
         height = '100%'
         padding='0 1vw'
-        // paddingRight='2vw'
     >
-        <Box display='flex' border='2px solid' borderRadius='1em' boxShadow='5px 5px pink' marginTop='1em' height='max-content'>
+        <Box display='flex' border='2px solid' boxShadow='5px 5px pink' marginTop='1em' height='max-content'>
             <Box flexGrow='1' padding='0.3em 0.7em'>
                 <InputBase name='search' value={search} onChange={handleChange}/>
             </Box>
