@@ -48,10 +48,8 @@ const Nav = ({user, friendList, setFriendList, onlineFriends, currentChat, setCu
     }
 
     useEffect(() => {
-        if (friendList && user) {        
-        
+        if (friendList && user && friendUsername) {        
         const person = friendList[0].filter((friend) => friend.username === friendUsername)
-        
         setCurrentChat([user.id, person[0].id])
         }
     }, [friendList])
