@@ -53,7 +53,7 @@ const FriendRequests = ({user, showFriendRequests, setShowFriendRequests}) => {
     }
 
   return (
-    <Box display='flex' flexDirection='column' gap='1em' flexGrow='1' margintop='2em'>hi
+    <Box display='flex' flexDirection='column' gap='1em' flexGrow='1' margintop='2em'>
       {friendRequests && friendRequests.map((item, index) => {
                 return(
                     <Box key={index} display='flex' alignItems='center' justifyContent='space-between'>
