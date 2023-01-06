@@ -24,9 +24,9 @@ const Home = ({user, friendList, setFriendList}) => {
             console.log(data);
             setReceivedMessage(
               {
-                sender: data.senderId,
-                text: data.content,
-                createdAt: new Date(Date.now())
+                sender_id: data.senderId,
+                content: data.content,
+                time_stamp: new Date(Date.now())
               }
             )
           })
