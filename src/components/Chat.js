@@ -1,76 +1,48 @@
-import { Avatar, Box, Button, FormControl, TextField, Typography, Badge } from '@mui/material'
+import { Avatar, Box, Button, FormControl, TextField, Typography, Badge, Divider } from '@mui/material'
 import axios from 'axios'
 import React, { useEffect, useState, useRef } from 'react'
 import io from 'socket.io-client'
 import moment from 'moment'
 
 
-const Chat = ({user, conversation, friendUsername, friendList, socket}) => {
-    const [message, setMessage] = useState('')
-    const [receivedMessage, setReceivedMessage] = useState(null)
+const Chat = ({user, conversation, message, setMessage, sendMessage, friendUsername}) => {
+    const scrollRef = useRef();
 
     const handleChange = (e) => {
         e.target.name = e.target.value
         setMessage(e.target.name)
     }
 
-    const sendMessage = async () => {
-      let receiverId = friendList && await friendList[0].filter(item => item.username === friendUsername)
-      receiverId = receiverId[0].id
-
-      socket.current.emit('sendMessage', 
-      {
-        senderId: user.id,
-        receiverId,
-        content: message
-      })
-
-      await axios.post('https://chat-r.herokuapp.com/api/messages',
-      {
-          senderUsername: user.username,
-          receiverUsername: friendUsername,
-          content: message
-      },
-      {
-          headers: {
-              'Authorization': `Bearer ${user.token}`
-          } 
-
-      })
-      .then(res => console.log(res.data))
-      .catch(err => console.log(err))
-    }
-
     useEffect(() => {
-        socket.current.on('receiveMessage', data => {
-          setReceivedMessage(
-            {
-              sender: data.senderId,
-              text: data.content,
-              createdAt: Date.now()
-            }
-          )
-        })
-    })
-
-    // useEffect(() => {
-    //     receivedMessage
-    //     setM
-    // }, [receivedMessage])
+        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, [conversation]);
 
     return (
-        <Box width='100%' display='flex' flexDirection='column' gap='1em'>
-        {conversation && conversation.map((item, index) => {
-            return (
-                <Box key={index} display='flex' width='100%' justifyContent={user.id === item.sender_id ? 'flex-end': 'flex-start'}>
-                        <Avatar variant='soft' height='2em'>me</Avatar>
-                        <Box width='max-content' padding='0.5em' borderRadius='1em' backgroundColor={user.id === item.sender_id ? 'pink': 'lightgray'}>
-                            <Typography>{item.content}</Typography>
-                        </Box>
-                    <Typography>{moment(`${item.time_stamp}`).format('MMM DD YYYY, h:mm a')}</Typography>
+        <Box width='100%' display='flex' flexDirection='column' gap='1em' overflow='auto' height='100%'>
+            <Box className='chat-info'
+                    display='flex'
+                    alignItems='center'
+                    gap='1rem'
+                    height='4em'
+                >
+                    <Avatar />
+                    <Box>
+                        <Typography variant='h1' fontSize='1.5rem' fontWeight='bold'>@{friendUsername}</Typography>
+                    </Box>
                 </Box>
-            )
-        })}
+                <Divider orientation='horizontal' width='100%' color='black'/>
+            {conversation && conversation.map((item, index) => {
+                return (
+                    <Box key={index} display='flex' width='100%' justifyContent={user.id === item.sender_id ? 'flex-end': 'flex-start'}>
+                            {user.id!==item.sender_id && <Avatar variant='soft' height='2em' sx={{backgroundColor: 'gray'}}></Avatar>}
+                            <Box width='max-content' padding='0.5em' borderRadius='1em' backgroundColor={user.id === item.sender_id ? 'pink': 'lightgray'}>
+                                <Typography>{item.content}</Typography>
+                            </Box>
+                            {user.id===item.sender_id && <Avatar variant='soft' height='2em' sx={{backgroundColor:'salmon'}}></Avatar>}
+                        <Typography>{moment(`${item.time_stamp}`).format('MMM DD YYYY, h:mm a')}</Typography>
+                    </Box>
+                )
+            })}
         <FormControl>
             <TextField name='message' value={message} onChange={handleChange}></TextField>
             <Button onClick={message !== '' ? sendMessage : null}>Send</Button>

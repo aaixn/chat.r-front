@@ -5,10 +5,26 @@ import Login from './components/Login/Login.js';
 import Signup from './components/Signup/Signup';
 import Home from './components/Home';
 import Chat from './components/Chat';
+import axios from 'axios';
 
 const App = () => {
   const [user, setUser] = useState()
   const [friendList, setFriendList] = useState()
+
+  const getFriendList = async () => {
+    await axios.get(`https://chat-r.herokuapp.com/api/users/${user.username}/friends`,
+    {
+        headers: {
+            'Authorization': `Bearer ${user.token}`
+        }
+    })
+    .then(res =>setFriendList(res.data))
+    .catch(err => console.log(err))
+}
+
+useEffect(() => {
+    user && getFriendList()
+}, [user])
 
   useEffect(() => {
     if (window.localStorage.getItem('token')) {

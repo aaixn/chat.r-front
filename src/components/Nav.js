@@ -3,34 +3,37 @@ import { Box, Typography, Badge, Avatar, IconButton, InputBase, Divider } from '
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import FriendRequests from './FriendRequests';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import SearchUsers from './SearchUsers';
 
-const Nav = ({user, friendList, setFriendList, onlineFriends}) => {
+const Nav = ({user, friendList, setFriendList, onlineFriends, currentChat, setCurrentChat}) => {
     const [search, setSearch] = useState('')
     const [showFriendRequests, setShowFriendRequests] = useState(false)
+
+    const {friendUsername} = useParams()
+    console.log(friendUsername)
 
     const handleChange = (e) => {
         e.target.name = e.target.value
         setSearch(e.target.name)
     }
 
-    const getFriendList = async () => {
-        await axios.get(`https://chat-r.herokuapp.com/api/users/${user.username}/friends`,
-        {
-            headers: {
-                'Authorization': `Bearer ${user.token}`
-            }
-        })
-        .then(res =>setFriendList(res.data))
-        .catch(err => console.log(err))
-    }
+    // const getFriendList = async () => {
+    //     await axios.get(`https://chat-r.herokuapp.com/api/users/${user.username}/friends`,
+    //     {
+    //         headers: {
+    //             'Authorization': `Bearer ${user.token}`
+    //         }
+    //     })
+    //     .then(res =>setFriendList(res.data))
+    //     .catch(err => console.log(err))
+    // }
 
-    useEffect(() => {
-        user && getFriendList()
-    }, [showFriendRequests])
+    // useEffect(() => {
+    //     user && getFriendList()
+    // }, [showFriendRequests])
 
     const active = {
         '& .MuiBadge-badge': {
@@ -53,6 +56,20 @@ const Nav = ({user, friendList, setFriendList, onlineFriends}) => {
     const avatar = {
         backgroundColor: 'pink'
     }
+
+    const setCurrentChatTo = (user, friend) => {
+        setCurrentChat([user, friend])
+        // console.log(currentChat);
+    }
+
+    useEffect(() => {
+        if (friendList) {        
+        
+        const person = friendList[0].filter((friend) => friend.username === friendUsername)
+        
+        setCurrentChat([user.id, person[0].id])
+        }
+    }, [friendList])
 
   if (user) return (
     <Box className='nav'
@@ -78,7 +95,7 @@ const Nav = ({user, friendList, setFriendList, onlineFriends}) => {
             <Box display='flex' flexDirection='column' gap='1em' flexGrow='1' marginTop='2em'>
                 {friendList && friendList.map((item, index) => {
                     return(
-                        <Link to={`/${user.username}/${item[0].username}`} key={index}>
+                        <Link to={`/${user.username}/${item[0].username}`} key={index} onClick={() => setCurrentChatTo(user.id, item[0].id)}>
                         <Box display='flex' alignItems='center'>
                             <Badge overlap='circular' variant='dot' sx={onlineFriends && onlineFriends.includes(item[0].id) ? active : inactive} >
                                 <Avatar variant='soft' sx={avatar} height='2em'>{item[0].name.charAt(0).toUpperCase()}</Avatar>

@@ -12,33 +12,68 @@ const Home = ({user, friendList, setFriendList}) => {
     const socket = useRef()
     const [conversation, setConversation] = useState()
     const [onlineFriends, setOnlineFriends] = useState()
+    const [currentChat, setCurrentChat] = useState({
+        members: []
+    })
+    const [message, setMessage] = useState('')
+    const [receivedMessage, setReceivedMessage] = useState(null)
 
     useEffect(() => {
         socket.current = io('https://chat-r.herokuapp.com/')
+        socket.current.on('receiveMessage', data => {
+            setReceivedMessage(
+              {
+                sender: data.senderId,
+                text: data.content,
+                createdAt: Date.now()
+              }
+            )
+          })
     }, [])
+    console.log(currentChat);
+    useEffect(() => {
+        receivedMessage && currentChat.includes(receivedMessage.sender) &&
+        setConversation((prev) => [...prev, receivedMessage]);
+    }, [receivedMessage, currentChat]);
 
     useEffect(() => {
         user && socket.current.emit('addUser', user.id)
         socket.current.on('getUsers', async (users) => {
-            console.log(users);
             user && setOnlineFriends(await user.friends.filter(friend => users.some(user => user.userId === friend)))
         })
     }, [user])
 
-    // user && socket.current.emit('sendMessage', {
-    //     senderId: user.id,
-    //     receiverId: 5,
-    //     content:'hi from baby po'
-    // })
 
-    // useEffect(() => {
-    //     socket.current = io('http://localhost:4000')
-    //     socket.current.on('retrieveMessage', (data) => {
-    //         setIncomingMessage({
-    //             sender_id: data.
-    //         })
-    //     })
-    // })
+    const sendMessage = async (e) => {
+      e.preventDefault()  
+      let receiverId = friendList && await friendList[0].filter(item => item.username === friendUsername)
+      console.log(friendList)
+      console.log(receiverId)
+      receiverId = receiverId[0].id
+      console.log(receiverId);
+
+      socket.current.emit('sendMessage', 
+      {
+        senderId: user.id,
+        receiverId: receiverId,
+        content: message
+      })
+
+      await axios.post('https://chat-r.herokuapp.com/api/messages',
+      {
+          senderUsername: user.username,
+          receiverUsername: friendUsername,
+          content: message
+      },
+      {
+          headers: {
+              'Authorization': `Bearer ${user.token}`
+          } 
+
+      })
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err))
+    }
 
     const getMessages = async() => {
         await axios.get(`https://chat-r.herokuapp.com/api/messages/${user.username}/${friendUsername}`, 
@@ -50,9 +85,10 @@ const Home = ({user, friendList, setFriendList}) => {
         .catch(err => console.log(err))
     }
 
+
     useEffect(() => {
         user && friendUsername && getMessages()
-    }, [friendUsername, user])
+    }, [friendUsername, user, currentChat])
 
     return (
         <Box className='home'
@@ -61,9 +97,9 @@ const Home = ({user, friendList, setFriendList}) => {
             justifyContent='center'
             gap='1rem'
             height = '100vh'
-            padding='0 1rem'
+            // padding='0 1rem'
         >
-            <Nav user={user} friendList={friendList} setFriendList={setFriendList} onlineFriends={onlineFriends}/> 
+            <Nav user={user} friendList={friendList} setFriendList={setFriendList} onlineFriends={onlineFriends} currentChat={currentChat} setCurrentChat={setCurrentChat}/> 
                 <Box 
                     display='flex'
                     alignItems='center'
@@ -74,7 +110,7 @@ const Home = ({user, friendList, setFriendList}) => {
                     height = '93vh'
                     padding='1em'
                 >
-                    {conversation ? <Chat conversation={conversation} user={user} friendUsername={friendUsername} friendList={friendList} socket={socket}/> :
+                    {conversation ? <Chat conversation={conversation} setConversation={setConversation} user={user} friendUsername={friendUsername} friendList={friendList} socket={socket} message={message} setMessage={setMessage} sendMessage={sendMessage}/> :
                     <Typography variant='h5'>Select a friend to start chatting with.</Typography>}
                 </Box>
         </Box>
