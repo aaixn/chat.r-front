@@ -10,6 +10,7 @@ import axios from 'axios';
 const App = () => {
   const [user, setUser] = useState()
   const [friendList, setFriendList] = useState()
+  const [showFriendRequests, setShowFriendRequests] = useState(false)
 
   const getFriendList = async () => {
     await axios.get(`https://chat-r.herokuapp.com/api/users/${user.username}/friends`,
@@ -24,7 +25,7 @@ const App = () => {
 
 useEffect(() => {
     user && getFriendList()
-}, [user])
+}, [user, showFriendRequests])
 
   useEffect(() => {
     if (window.localStorage.getItem('token')) {
@@ -48,10 +49,10 @@ useEffect(() => {
   return (
     <div className="App">
       <Routes>
-        <Route path='/' element={user || window.localStorage.getItem('token') ? <Home user={user} setUser={setUser} friendList={friendList} setFriendList={setFriendList}/> : <Navigate to='/login'/>}></Route>
+        <Route path='/' element={user || window.localStorage.getItem('token') ? <Home user={user} setUser={setUser} friendList={friendList} showFriendRequests={showFriendRequests} setShowFriendRequests={setShowFriendRequests} setFriendList={setFriendList}/> : <Navigate to='/login'/>}></Route>
         <Route path='/login' element={<Login user={user} setUser={setUser} />}></Route>
         <Route path='/signup' element={<Signup user={user} setUser={setUser} />}></Route>
-        <Route path='/:username/:friendUsername' element={<Home user={user} friendList={friendList} setFriendList={setFriendList} />}></Route>
+        <Route path='/:username/:friendUsername' element={<Home user={user} friendList={friendList} setFriendList={setFriendList} showFriendRequests={showFriendRequests} setShowFriendRequests={setShowFriendRequests}/>}></Route>
       </Routes>
     </div>
   );

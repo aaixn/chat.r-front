@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import io from 'socket.io-client'
 
-const Home = ({user, friendList, setFriendList}) => {
+const Home = ({user, friendList, setFriendList, showFriendRequests, setShowFriendRequests}) => {
     const {friendUsername} = useParams()
     const socket = useRef()
     const [conversation, setConversation] = useState()
@@ -93,7 +93,7 @@ const Home = ({user, friendList, setFriendList}) => {
             alignItems='center'
             height = '100vh'
         >
-            <Nav user={user} friendList={friendList} setFriendList={setFriendList} onlineFriends={onlineFriends} currentChat={currentChat} setCurrentChat={setCurrentChat}/> 
+            <Nav user={user} friendList={friendList} setFriendList={setFriendList} showFriendRequests={showFriendRequests} setShowFriendRequests={setShowFriendRequests} onlineFriends={onlineFriends} currentChat={currentChat} setCurrentChat={setCurrentChat}/> 
                 <Divider orientation='vertical' color='black'/>
                 <Box 
                     display='flex'

@@ -6,9 +6,8 @@ import FriendRequests from './FriendRequests';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import SearchUsers from './SearchUsers';
 
-const Nav = ({user, friendList, onlineFriends, setCurrentChat}) => {
+const Nav = ({user, friendList, onlineFriends, setCurrentChat, showFriendRequests, setShowFriendRequests}) => {
     const [search, setSearch] = useState('')
-    const [showFriendRequests, setShowFriendRequests] = useState(false)
     const {friendUsername} = useParams()
     const navigate = useNavigate()
 
@@ -90,7 +89,7 @@ const Nav = ({user, friendList, onlineFriends, setCurrentChat}) => {
                         </Link>
                     )
                 })}
-            </Box> : <SearchUsers user={user} search={search} setSearch={setSearch}/>}
+            </Box> : <SearchUsers user={user} search={search} setSearch={setSearch} setShowFriendRequests={setShowFriendRequests}/>}
         <Box className='me'
             display='flex'
             alignItems='center'

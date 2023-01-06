@@ -4,7 +4,7 @@ import { Box, Avatar, Typography } from '@mui/material'
 import AddReactionRoundedIcon from '@mui/icons-material/AddReactionRounded';
 import { useNavigate } from 'react-router-dom';
 
-const SearchUsers = ({user, search}) => {
+const SearchUsers = ({user, search, setSearch, setShowFriendRequests}) => {
     const [matchedUsers, setMatchedUsers] = useState()
     const navigate = useNavigate()
     
@@ -37,6 +37,7 @@ const SearchUsers = ({user, search}) => {
         })
         .then(res => console.log(res.data))
         .catch(err => console.log(err))
+        setSearch('')
     }
 
   return (
@@ -50,7 +51,11 @@ const SearchUsers = ({user, search}) => {
                                 <Typography marginLeft='1rem' fontWeight='bold'>{item.name}</Typography>
                                 <Typography marginLeft='1rem' variant='subtitle2'>@{item.username}</Typography>
                             </Box>
-                            <AddReactionRoundedIcon sx={{color: 'gray', "&:hover": { color: "darkseagreen" }}} onClick={() => sendFriendRequest(item)}/>
+                            <AddReactionRoundedIcon sx={{color: 'gray', "&:hover": { color: "darkseagreen" }}} onClick={() => {
+                                sendFriendRequest(item)
+                                setShowFriendRequests(false)
+                            }}
+                            />
                         </Box>
                     </Box>
                 )
