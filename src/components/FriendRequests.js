@@ -62,12 +62,14 @@ const FriendRequests = ({user, showFriendRequests, setShowFriendRequests}) => {
                             <Typography marginLeft='1rem'>{item.senderName}</Typography>
                         </Box>
                         <Box>
-                            <CheckCircleRoundedIcon onClick={() => {
+                            <CheckCircleRoundedIcon sx={{color:'lightgreen', "&:hover": { cursor: "pointer" }}}
+                            onClick={() => {
                                 acceptFriendRequest(item)
                                 setShowFriendRequests(!showFriendRequests)
                             }}
-                            sx={{color:'lightgreen'}}/>
-                            <CancelRoundedIcon onClick={() => declineFriendRequest(item)} sx={{color:'red'}}/>
+                            />
+                            <CancelRoundedIcon sx={{color:'red', "&:hover": { cursor: "pointer" }}}
+                            onClick={() => declineFriendRequest(item)}/>
                         </Box>
                     </Box>
                 )

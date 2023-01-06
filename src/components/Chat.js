@@ -52,7 +52,7 @@ const Chat = ({user, conversation, message, setMessage, sendMessage, friendUsern
             </Box>
             <Box display='flex' width='100%' alignItems='center'>
                 <TextField sx={{flexGrow: 1}} name='message' value={message} onChange={handleChange}></TextField>
-                <SendRoundedIcon onClick={message !== '' ? sendMessage : null} width='10%' sx={{color: 'pink', fontSize: '2em'}}/>
+                <SendRoundedIcon onClick={message !== '' ? sendMessage : null} width='10%' sx={{color: 'pink', fontSize: '2em', "&:hover": { cursor: "pointer" }}}/>
             </Box>
         </Box>
     )

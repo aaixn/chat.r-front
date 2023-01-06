@@ -104,8 +104,8 @@ const Nav = ({user, friendList, onlineFriends, setCurrentChat, showFriendRequest
                 />
                 <Typography fontWeight='bold' marginLeft='1rem'>me</Typography>
             </Box>
-            <PersonAddAlt1RoundedIcon onClick={() => setShowFriendRequests(!showFriendRequests)} sx={{color: 'black', fontSize: '2em'}}/>
-            <ExitToAppRoundedIcon sx={{color:'red', fontSize: '2em'}} onClick={logOut}/>
+            <PersonAddAlt1RoundedIcon onClick={() => setShowFriendRequests(!showFriendRequests)} sx={{color: 'black', fontSize: '2em', "&:hover": { cursor: "pointer" }}}/>
+            <ExitToAppRoundedIcon sx={{color:'red', fontSize: '2em', "&:hover": { cursor: "pointer" }}} onClick={logOut}/>
         </Box>
     </Box>
   )
