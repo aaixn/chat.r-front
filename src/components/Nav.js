@@ -13,7 +13,6 @@ const Nav = ({user, friendList, setFriendList, onlineFriends, currentChat, setCu
     const [showFriendRequests, setShowFriendRequests] = useState(false)
 
     const {friendUsername} = useParams()
-    console.log(friendUsername)
 
     const handleChange = (e) => {
         e.target.name = e.target.value

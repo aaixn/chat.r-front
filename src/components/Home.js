@@ -30,7 +30,7 @@ const Home = ({user, friendList, setFriendList}) => {
             )
           })
     }, [])
-    console.log(currentChat);
+
     useEffect(() => {
         receivedMessage && currentChat.includes(receivedMessage.sender) &&
         setConversation((prev) => [...prev, receivedMessage]);
@@ -47,10 +47,7 @@ const Home = ({user, friendList, setFriendList}) => {
     const sendMessage = async (e) => {
       e.preventDefault()  
       let receiverId = friendList && await friendList[0].filter(item => item.username === friendUsername)
-      console.log(friendList)
-      console.log(receiverId)
       receiverId = receiverId[0].id
-      console.log(receiverId);
 
       socket.current.emit('sendMessage', 
       {

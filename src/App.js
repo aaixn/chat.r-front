@@ -48,7 +48,7 @@ useEffect(() => {
   return (
     <div className="App">
       <Routes>
-        <Route path='/' element={user ? <Home user={user} setUser={setUser} friendList={friendList} setFriendList={setFriendList}/> : <Navigate to='/login'/>}></Route>
+        <Route path='/' element={user || window.localStorage.getItem('token') ? <Home user={user} setUser={setUser} friendList={friendList} setFriendList={setFriendList}/> : <Navigate to='/login'/>}></Route>
         <Route path='/login' element={<Login user={user} setUser={setUser} />}></Route>
         <Route path='/signup' element={<Signup user={user} setUser={setUser} />}></Route>
         <Route path='/:username/:friendUsername' element={<Home user={user} friendList={friendList} setFriendList={setFriendList} />}></Route>

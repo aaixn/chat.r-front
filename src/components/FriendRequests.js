@@ -21,7 +21,6 @@ const FriendRequests = ({user, showFriendRequests, setShowFriendRequests}) => {
     useEffect(() => {
         getFriendRequests()
     }, [user])
-    console.log(friendRequests);
 
     const acceptFriendRequest = async(item) => {
         await axios.put(`https://chat-r.herokuapp.com/api/friendRequest`,
