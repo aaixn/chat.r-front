@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Typography, Badge, Avatar, IconButton, InputBase, Divider } from '@mui/material'
-import SettingsIcon from '@mui/icons-material/Settings';
-import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded';
-import { Link, useParams } from 'react-router-dom';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import FriendRequests from './FriendRequests';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import SearchUsers from './SearchUsers';
@@ -11,10 +10,16 @@ const Nav = ({user, friendList, onlineFriends, setCurrentChat}) => {
     const [search, setSearch] = useState('')
     const [showFriendRequests, setShowFriendRequests] = useState(false)
     const {friendUsername} = useParams()
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         e.target.name = e.target.value
         setSearch(e.target.name)
+    }
+
+    const logOut = () => {
+        window.localStorage.removeItem('token')
+        navigate('/login')
     }
 
     const active = {
@@ -100,8 +105,8 @@ const Nav = ({user, friendList, onlineFriends, setCurrentChat}) => {
                 />
                 <Typography fontWeight='bold' marginLeft='1rem'>me</Typography>
             </Box>
-            <PersonAddAlt1RoundedIcon onClick={() => setShowFriendRequests(!showFriendRequests)} sx={{color: 'gray', fontSize: '2em'}}/>
-            <SettingsIcon sx={{color: 'gray', fontSize: '2em'}}/>
+            <PersonAddAlt1RoundedIcon onClick={() => setShowFriendRequests(!showFriendRequests)} sx={{color: 'black', fontSize: '2em'}}/>
+            <ExitToAppRoundedIcon sx={{color:'red', fontSize: '2em'}} onClick={logOut}/>
         </Box>
     </Box>
   )
