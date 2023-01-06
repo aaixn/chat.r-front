@@ -7,18 +7,23 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import io from 'socket.io-client'
 
-const Home = ({user}) => {
+const Home = ({user, friendList, setFriendList}) => {
     const {friendUsername} = useParams()
     const socket = useRef()
     const [conversation, setConversation] = useState()
+    const [onlineFriends, setOnlineFriends] = useState()
 
     useEffect(() => {
-        socket.current = io('http://localhost:4000')
+        socket.current = io('https://chat-r.herokuapp.com/')
     }, [])
 
-    // useEffect(() => {
-    //     user && socket.current.emit('user', user.id)
-    // }, [user])
+    useEffect(() => {
+        user && socket.current.emit('addUser', user.id)
+        socket.current.on('getUsers', async (users) => {
+            console.log(users);
+            user && setOnlineFriends(await user.friends.filter(friend => users.some(user => user.userId === friend)))
+        })
+    }, [user])
 
     // user && socket.current.emit('sendMessage', {
     //     senderId: user.id,
@@ -48,6 +53,7 @@ const Home = ({user}) => {
     useEffect(() => {
         user && friendUsername && getMessages()
     }, [friendUsername, user])
+
     return (
         <Box className='home'
             display = 'flex'
@@ -57,13 +63,7 @@ const Home = ({user}) => {
             height = '100vh'
             padding='0 1rem'
         >
-            {/* <Box className='nav'
-                border= '2px solid'
-                borderRadius='20px'
-                width = '25%'
-                height = '95vh'
-            /> */}
-            <Nav user={user}/> 
+            <Nav user={user} friendList={friendList} setFriendList={setFriendList} onlineFriends={onlineFriends}/> 
                 <Box 
                     display='flex'
                     alignItems='center'
@@ -74,7 +74,7 @@ const Home = ({user}) => {
                     height = '93vh'
                     padding='1em'
                 >
-                    {conversation ? <Chat conversation={conversation} user={user} friendUsername={friendUsername}/> :
+                    {conversation ? <Chat conversation={conversation} user={user} friendUsername={friendUsername} friendList={friendList} socket={socket}/> :
                     <Typography variant='h5'>Select a friend to start chatting with.</Typography>}
                 </Box>
         </Box>

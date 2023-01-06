@@ -3,14 +3,13 @@ import { Box, Typography, Badge, Avatar, IconButton, InputBase, Divider } from '
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import FriendRequests from './FriendRequests';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import SearchUsers from './SearchUsers';
 
-const Nav = ({user}) => {
+const Nav = ({user, friendList, setFriendList, onlineFriends}) => {
     const [search, setSearch] = useState('')
-    const [friendList, setFriendList] = useState()
     const [showFriendRequests, setShowFriendRequests] = useState(false)
 
     const handleChange = (e) => {
@@ -25,17 +24,16 @@ const Nav = ({user}) => {
                 'Authorization': `Bearer ${user.token}`
             }
         })
-        .then((res) => setFriendList(res.data))
+        .then(res =>setFriendList(res.data))
         .catch(err => console.log(err))
     }
 
     useEffect(() => {
         user && getFriendList()
-    }, [user, showFriendRequests])
+    }, [showFriendRequests])
 
     const active = {
         '& .MuiBadge-badge': {
-            color: 'green',
             backgroundColor: 'lightgreen',
             height: '1rem',
             minWidth: '1rem',
@@ -45,8 +43,7 @@ const Nav = ({user}) => {
 
     const inactive = {
         '& .MuiBadge-badge': {
-            color: 'green',
-            backgroundColor: 'lightgreen',
+            backgroundColor: 'lightgray',
             height: '1rem',
             minWidth: '1rem',
             borderRadius: '0.5rem'
@@ -83,10 +80,13 @@ const Nav = ({user}) => {
                     return(
                         <Link to={`/${user.username}/${item[0].username}`} key={index}>
                         <Box display='flex' alignItems='center'>
-                            <Badge overlap='circular' variant='dot' sx={item[0].active ? active : inactive} >
+                            <Badge overlap='circular' variant='dot' sx={onlineFriends && onlineFriends.includes(item[0].id) ? active : inactive} >
                                 <Avatar variant='soft' sx={avatar} height='2em'>{item[0].name.charAt(0).toUpperCase()}</Avatar>
                             </Badge>
-                            <Typography marginLeft='1rem'>{item[0].name}</Typography>
+                            <Box>
+                                <Typography marginLeft='1rem' fontWeight='bold'>{item[0].name}</Typography>
+                                <Typography marginLeft='1rem' variant='subtitle2'>@{item[0].username}</Typography>
+                            </Box>
                         </Box>
                         </Link>
                     )

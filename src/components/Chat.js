@@ -5,50 +5,78 @@ import io from 'socket.io-client'
 import moment from 'moment'
 
 
-const Chat = ({user, conversation, friendUsername}) => {
+const Chat = ({user, conversation, friendUsername, friendList, socket}) => {
     const [message, setMessage] = useState('')
+    const [receivedMessage, setReceivedMessage] = useState(null)
 
     const handleChange = (e) => {
         e.target.name = e.target.value
         setMessage(e.target.name)
-      }
+    }
 
-      const sendMessage = async () => {
-        await axios.post('https://chat-r.herokuapp.com/api/messages',
-        {
-            senderUsername: user.username,
-            receiverUsername: friendUsername,
-            content: message
-        },
-        {
-            headers: {
-                'Authorization': `Bearer ${user.token}`
-            } 
+    const sendMessage = async () => {
+      let receiverId = friendList && await friendList[0].filter(item => item.username === friendUsername)
+      receiverId = receiverId[0].id
 
+      socket.current.emit('sendMessage', 
+      {
+        senderId: user.id,
+        receiverId,
+        content: message
+      })
+
+      await axios.post('https://chat-r.herokuapp.com/api/messages',
+      {
+          senderUsername: user.username,
+          receiverUsername: friendUsername,
+          content: message
+      },
+      {
+          headers: {
+              'Authorization': `Bearer ${user.token}`
+          } 
+
+      })
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err))
+    }
+
+    useEffect(() => {
+        socket.current.on('receiveMessage', data => {
+          setReceivedMessage(
+            {
+              sender: data.senderId,
+              text: data.content,
+              createdAt: Date.now()
+            }
+          )
         })
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err))
-      }
+    })
 
-      return (
-    <Box width='100%' display='flex' flexDirection='column' gap='1em'>
-      {conversation && conversation.map((item, index) => {
-        return (
-            <Box key={index} display='flex' width='100%' justifyContent={user.id === item.sender_id ? 'flex-end': 'flex-start'}>
-                    <Avatar variant='soft' height='2em'>me</Avatar>
-                    <Box width='max-content' padding='0.5em' borderRadius='1em' backgroundColor={user.id === item.sender_id ? 'pink': 'lightgray'}>
-                        <Typography>{item.content}</Typography>
-                    </Box>
-                <Typography>{moment(`${item.time_stamp}`).format('MMM DD YYYY, h:mm a')}</Typography>
-            </Box>
-        )
-      })}
-      <FormControl>
-        <TextField name='message' value={message} onChange={handleChange}></TextField>
-        <Button onClick={message !== '' ? sendMessage : null}>Send</Button>
-      </FormControl>
-    </Box>
-  )
+    // useEffect(() => {
+    //     receivedMessage
+    //     setM
+    // }, [receivedMessage])
+
+    return (
+        <Box width='100%' display='flex' flexDirection='column' gap='1em'>
+        {conversation && conversation.map((item, index) => {
+            return (
+                <Box key={index} display='flex' width='100%' justifyContent={user.id === item.sender_id ? 'flex-end': 'flex-start'}>
+                        <Avatar variant='soft' height='2em'>me</Avatar>
+                        <Box width='max-content' padding='0.5em' borderRadius='1em' backgroundColor={user.id === item.sender_id ? 'pink': 'lightgray'}>
+                            <Typography>{item.content}</Typography>
+                        </Box>
+                    <Typography>{moment(`${item.time_stamp}`).format('MMM DD YYYY, h:mm a')}</Typography>
+                </Box>
+            )
+        })}
+        <FormControl>
+            <TextField name='message' value={message} onChange={handleChange}></TextField>
+            <Button onClick={message !== '' ? sendMessage : null}>Send</Button>
+        </FormControl>
+        </Box>
+    )
 }
 
 export default Chat

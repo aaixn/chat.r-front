@@ -8,6 +8,7 @@ import Chat from './components/Chat';
 
 const App = () => {
   const [user, setUser] = useState()
+  const [friendList, setFriendList] = useState()
 
   useEffect(() => {
     if (window.localStorage.getItem('token')) {
@@ -20,7 +21,8 @@ const App = () => {
           name: token.name,
           username: token.username,
           pfp: token.pfp,
-          bio: token.bio
+          bio: token.bio,
+          friends: token.friends
         })
       }
     }
@@ -30,10 +32,10 @@ const App = () => {
   return (
     <div className="App">
       <Routes>
-        <Route path='/' element={<Home user={user}/> }></Route>
+        <Route path='/' element={<Home user={user} setUser={setUser} friendList={friendList} setFriendList={setFriendList}/> }></Route>
         <Route path='/login' element={<Login user={user} setUser={setUser} />}></Route>
         <Route path='/signup' element={<Signup user={user} setUser={setUser} />}></Route>
-        <Route path='/:username/:friendUsername' element={<Home user={user} />}></Route>
+        <Route path='/:username/:friendUsername' element={<Home user={user} friendList={friendList} setFriendList={setFriendList} />}></Route>
       </Routes>
     </div>
   );
