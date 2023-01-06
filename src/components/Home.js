@@ -21,6 +21,7 @@ const Home = ({user, friendList, setFriendList}) => {
     useEffect(() => {
         socket.current = io('https://chat-r.herokuapp.com/')
         socket.current.on('receiveMessage', data => {
+            console.log(data);
             setReceivedMessage(
               {
                 sender: data.senderId,
@@ -30,6 +31,45 @@ const Home = ({user, friendList, setFriendList}) => {
             )
           })
     }, [])
+
+    const getMessages = async() => {
+        await axios.get(`https://chat-r.herokuapp.com/api/messages/${user.username}/${friendUsername}`, 
+        {
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            } 
+        }).then(res => setConversation(res.data))
+        .catch(err => console.log(err))
+    }
+
+    const sendMessage = async (e) => {
+        e.preventDefault()  
+        let receiverId = friendList && await friendList[0].filter(item => item.username === friendUsername)
+        receiverId = receiverId[0].id
+
+        socket.current.emit('sendMessage', 
+        {
+        senderId: user.id,
+        receiverId: receiverId,
+        content: message
+        })
+
+        await axios.post('https://chat-r.herokuapp.com/api/messages',
+        {
+            senderUsername: user.username,
+            receiverUsername: friendUsername,
+            content: message
+        },
+        {
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            } 
+
+        })
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err))
+        await getMessages()
+    }
 
     useEffect(() => {
         receivedMessage && currentChat?.includes(receivedMessage.sender) &&
@@ -42,46 +82,6 @@ const Home = ({user, friendList, setFriendList}) => {
             await user && setOnlineFriends(user.friends.filter(friend => users.some(user => user.userId === friend)))
         })
     }, [user])
-
-
-    const sendMessage = async (e) => {
-      e.preventDefault()  
-      let receiverId = friendList && await friendList[0].filter(item => item.username === friendUsername)
-      receiverId = receiverId[0].id
-
-      socket.current.emit('sendMessage', 
-      {
-        senderId: user.id,
-        receiverId: receiverId,
-        content: message
-      })
-
-      await axios.post('https://chat-r.herokuapp.com/api/messages',
-      {
-          senderUsername: user.username,
-          receiverUsername: friendUsername,
-          content: message
-      },
-      {
-          headers: {
-              'Authorization': `Bearer ${user.token}`
-          } 
-
-      })
-      .then(res => console.log(res.data))
-      .catch(err => console.log(err))
-    }
-
-    const getMessages = async() => {
-        await axios.get(`https://chat-r.herokuapp.com/api/messages/${user.username}/${friendUsername}`, 
-        {
-            headers: {
-                'Authorization': `Bearer ${user.token}`
-            } 
-        }).then(res => setConversation(res.data))
-        .catch(err => console.log(err))
-    }
-
 
     useEffect(() => {
         user && friendUsername && getMessages()
@@ -99,12 +99,10 @@ const Home = ({user, friendList, setFriendList}) => {
                     display='flex'
                     alignItems='center'
                     justifyContent='center'
-                    // border= '2px solid'
                     borderRadius='2em'
                     width = '70%'
                     height = '100%'
                     padding='1em'
-                    // marginTop='2em'
                     boxSizing='border-box'
                     flexGrow='1'
                 >
