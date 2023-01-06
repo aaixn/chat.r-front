@@ -20,21 +20,6 @@ const Nav = ({user, friendList, setFriendList, onlineFriends, currentChat, setCu
         setSearch(e.target.name)
     }
 
-    // const getFriendList = async () => {
-    //     await axios.get(`https://chat-r.herokuapp.com/api/users/${user.username}/friends`,
-    //     {
-    //         headers: {
-    //             'Authorization': `Bearer ${user.token}`
-    //         }
-    //     })
-    //     .then(res =>setFriendList(res.data))
-    //     .catch(err => console.log(err))
-    // }
-
-    // useEffect(() => {
-    //     user && getFriendList()
-    // }, [showFriendRequests])
-
     const active = {
         '& .MuiBadge-badge': {
             backgroundColor: 'lightgreen',
@@ -63,7 +48,7 @@ const Nav = ({user, friendList, setFriendList, onlineFriends, currentChat, setCu
     }
 
     useEffect(() => {
-        if (friendList) {        
+        if (friendList && user) {        
         
         const person = friendList[0].filter((friend) => friend.username === friendUsername)
         
