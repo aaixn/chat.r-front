@@ -5,6 +5,8 @@ by Ana Nguyen
 
 Chat.r is a live chat web application where users can add friends, see when their friends are active, and chat live with them.
 
+[Link to Backend Repo](https://github.com/aaixn/chat.r-back)
+
 ## Technologies
 
 - React.js
